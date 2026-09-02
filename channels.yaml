@@ -1,0 +1,19 @@
+channels:
+  - id: channel_1
+    tiktok_username: "blindonthemove"
+    youtube_channel_name: "Mike Mulligan"
+    owner_email: ""
+    google_credentials_file: "credentials/channel_1_client_secret.json"
+    oauth_token_file: "tokens/channel_1_token.json"
+    videos_per_day: 2
+    description_footer: "#blindonthemove #shorts #lifestyle #storytime #inspiration"
+    default_tags: ["blindonthemove", "shorts", "blind", "lifestyle", "storytime", "inspiration", "viral"]
+    youtube_category_id: "22"
+    enabled: true
+    max_retry_days: 7
+    shorts_max_seconds: 180
+    upload_mode: popular_split
+    max_download_candidates: 20
+    slot_publish_times_utc:
+      1: "22:00"
+      2: "00:00"

@@ -1,0 +1,46 @@
+name: Update yt-dlp
+
+on:
+  schedule:
+    # Check for yt-dlp updates daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check latest yt-dlp version on PyPI
+        id: check
+        run: |
+          LATEST=$(python -c "import urllib.request, json; res = json.loads(urllib.request.urlopen('https://pypi.org/pypi/yt-dlp/json').read()); print(res['info']['version'])")
+          echo "Latest yt-dlp version on PyPI: $LATEST"
+          CURRENT=$(grep -oE 'yt-dlp>=[0-9.]+' requirements.txt | cut -d'=' -f2)
+          echo "Current pinned version: $CURRENT"
+          if [ "$LATEST" != "$CURRENT" ]; then
+            sed -i "s/yt-dlp>=[0-9.]*/yt-dlp>=$LATEST/" requirements.txt
+            echo "updated=true" >> $GITHUB_OUTPUT
+            echo "version=$LATEST" >> $GITHUB_OUTPUT
+          else
+            echo "updated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit update
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add requirements.txt
+          git commit -m "chore(deps): bump yt-dlp to ${{ steps.check.outputs.version }}"
+          git push origin main

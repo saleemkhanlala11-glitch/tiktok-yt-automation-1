@@ -1,0 +1,13 @@
+credentials/
+tokens/
+downloads/
+logs/
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+*.swp
+.DS_Store
