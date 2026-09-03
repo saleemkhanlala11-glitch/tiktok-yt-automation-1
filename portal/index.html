@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YouTube Shorts Automation Portal</title>
+  
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#07090e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="YT Auto">
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M21.58 7.19a2.5 2.5 0 0 0-1.76-1.77C18.26 5 12 5 12 5s-6.26 0-7.82.42A2.5 2.5 0 0 0 2.42 7.2 26.2 26.2 0 0 0 2 12a26.2 26.2 0 0 0 .42 4.81 2.5 2.5 0 0 0 1.76 1.77C5.74 19 12 19 12 19s6.26 0 7.82-.42a2.5 2.5 0 0 0 1.76-1.77A26.2 26.2 0 0 0 22 12a26.2 26.2 0 0 0-.42-4.81zM9.75 15.02V8.98L15 12l-5.25 3.02z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>YT Auto Studio</h1>
+        <span><span class="pulse-dot"></span> Cloud Runners Live (GitHub Actions)</span>
+      </div>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn btn-glass btn-sm" id="btnRefresh" title="Refresh Live Data">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        <span class="hide-mobile">Sync</span>
+      </button>
+      <button class="btn btn-primary btn-sm" id="btnOpenAddModal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Channel</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Global Stats Overview Banner -->
+    <section class="stats-banner">
+      <div class="stat-card">
+        <div class="stat-label">
+          <span class="pulse-dot"></span> Active Channels
+        </div>
+        <div class="stat-value" id="valTotalChannels">1</div>
+        <div class="stat-desc">All pipelines operational</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+          Shorts Uploaded
+        </div>
+        <div class="stat-value" id="valTotalShorts">--</div>
+        <div class="stat-desc" id="valUploadedToday">+1 today</div>
+      </div>
+
+      <div class="stat-card slot-countdown-card">
+        <div class="stat-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Next Upload (<span id="lblNextSlotName">Slot 2</span>)
+        </div>
+        <div class="countdown-clock" id="clockNextSlot">--:--:--</div>
+        <div class="stat-desc" id="lblNextSlotLocal">Scheduled 00:00 UTC</div>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <section class="control-bar">
+      <h2 class="section-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        Connected Channels
+      </h2>
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="inputSearch" class="search-input" placeholder="Search by channel or TikTok handle...">
+      </div>
+    </section>
+
+    <!-- Channels Grid List -->
+    <section class="channels-grid" id="channelsContainer">
+      <!-- Dynamic Channel Cards Injected via app.js -->
+    </section>
+
+    <!-- Recent Upload Activity Feed -->
+    <section class="feed-section">
+      <div class="feed-card">
+        <h3 class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Recent Uploads & Pipeline Runs
+        </h3>
+        <div class="feed-list" id="feedList">
+          <!-- Dynamic Items Injected via app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Add New Channel Modal Wizard -->
+  <div class="modal-backdrop" id="addChannelModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚡ Add New YouTube Channel</h2>
+        <button class="btn-close" id="btnCloseAddModal">&times;</button>
+      </div>
+
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 18px;">
+        Follow the 3-step automated setup based on <strong>Section 11 of Automation.md</strong>. Fill out the details below to generate your config and setup commands:
+      </p>
+
+      <form id="formAddChannel">
+        <div class="form-group">
+          <label class="form-label">Channel Identifier ID</label>
+          <input type="text" id="newChannelId" class="form-input" placeholder="e.g. channel_2" required value="channel_2">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">TikTok Creator Handle (Source)</label>
+          <input type="text" id="newTiktokUser" class="form-input" placeholder="e.g. crs_extra (without @)" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">YouTube Channel Name</label>
+          <input type="text" id="newYoutubeName" class="form-input" placeholder="e.g. Mike Mulligan" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Owner Gmail (Google Cloud Project)</label>
+          <input type="email" id="newOwnerEmail" class="form-input" placeholder="e.g. channel2@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Audience Timezone Group / Country</label>
+          <select id="newTimezoneGroup" class="form-select">
+            <option value="US">US Audience (22:00 UTC & 00:00 UTC — 6 PM / 8 PM ET)</option>
+            <option value="EU">Europe Audience (17:00 UTC & 19:00 UTC — 7 PM / 9 PM CEST)</option>
+            <option value="JP">Japan Audience (09:00 UTC & 11:00 UTC — 6 PM / 8 PM JST)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Upload Mode</label>
+          <select id="newUploadMode" class="form-select">
+            <option value="popular_split">popular_split (Slot 1: Newest, Slot 2: Most Viewed)</option>
+            <option value="short_only">short_only (Newest on all slots)</option>
+            <option value="popular_only">popular_only (Most viewed 1/day)</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="btnGenerateConfig" style="width: 100%; margin-top: 8px;">
+          Generate Configuration & Secrets Setup
+        </button>
+      </form>
+
+      <!-- Output Snippet Display -->
+      <div id="wizardOutputBox" style="display: none; margin-top: 18px;">
+        <h4 style="font-size: 0.88rem; color: #fff; margin-bottom: 6px;">1. Add to channels.yaml:</h4>
+        <div class="generated-box" id="codeChannelsYaml"></div>
+
+        <h4 style="font-size: 0.88rem; color: #fff; margin: 12px 0 6px 0;">2. Generate OAuth Token (Terminal):</h4>
+        <div class="generated-box" id="codeTokenCmd"></div>
+
+        <h4 style="font-size: 0.88rem; color: #fff; margin: 12px 0 6px 0;">3. GitHub Repository Secrets to Add:</h4>
+        <div class="generated-box" id="codeSecretsHelp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-nav-bar">
+    <button class="nav-tab active" id="tabDashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      Dashboard
+    </button>
+    <button class="nav-tab" id="tabAddChannel">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      Add Channel
+    </button>
+    <button class="nav-tab" id="tabSync">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+      Refresh
+    </button>
+  </nav>
+
+  <!-- Toast Message Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

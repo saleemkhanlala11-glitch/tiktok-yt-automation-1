@@ -1,14 +1,14 @@
 channels:
   - id: channel_1
-    tiktok_username: "blindonthemove"
-    youtube_channel_name: "Mike Mulligan"
-    owner_email: ""
+    tiktok_username: "scibodytherapy"
+    youtube_channel_name: "WONDERIST"
+    owner_email: "saleemkhandevspro@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
-    description_footer: "#blindonthemove #shorts #lifestyle #storytime #inspiration"
-    default_tags: ["blindonthemove", "shorts", "blind", "lifestyle", "storytime", "inspiration", "viral"]
-    youtube_category_id: "22"
+    description_footer: "#scibodytherapy #shorts #science #health #bodytherapy #wellness #facts #viral"
+    default_tags: ["scibodytherapy", "shorts", "science", "health", "bodytherapy", "wellness", "facts", "viral"]
+    youtube_category_id: "28"
     enabled: true
     max_retry_days: 7
     shorts_max_seconds: 180
@@ -17,3 +17,4 @@ channels:
     slot_publish_times_utc:
       1: "22:00"
       2: "00:00"
+

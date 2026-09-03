@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#311042"/>
+    </linearGradient>
+    <linearGradient id="ytGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#ff4b2b"/>
+    </linearGradient>
+    <linearGradient id="accentGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#bgGrad192)"/>
+  <rect width="188" height="188" x="2" y="2" rx="40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+  <circle cx="96" cy="96" r="68" fill="none" stroke="url(#accentGrad192)" stroke-width="2" stroke-dasharray="10 6" opacity="0.6"/>
+  <rect x="52" y="58" width="88" height="76" rx="18" fill="url(#ytGrad192)"/>
+  <polygon points="86,81 114,96 86,111" fill="#ffffff"/>
+  <circle cx="96" cy="28" r="6" fill="#06b6d4"/>
+  <circle cx="164" cy="96" r="6" fill="#10b981"/>
+  <circle cx="96" cy="164" r="6" fill="#8b5cf6"/>
+  <circle cx="28" cy="96" r="6" fill="#f59e0b"/>
+</svg>

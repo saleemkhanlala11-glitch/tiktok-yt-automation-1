@@ -22,17 +22,24 @@ def main():
 
     flow = InstalledAppFlow.from_client_secrets_file(cred_file, scopes=SCOPES)
     print("Starting local server on port 8088...", flush=True)
-    creds = flow.run_local_server(port=8088, prompt="consent", access_type="offline", open_browser=False)
+    creds = flow.run_local_server(
+        port=8088,
+        prompt="consent",
+        access_type="offline",
+        open_browser=False,
+        authorization_prompt_message="AUTH_URL_START: {url} :AUTH_URL_END"
+    )
 
     token_json = creds.to_json()
-    with open(token_file, "w") as f:
+    with open(token_file, "w", encoding="utf-8") as f:
         f.write(token_json)
 
     token_data = json.loads(token_json)
     if "refresh_token" in token_data:
-        print(f"SUCCESS: Token generated and saved to {token_file} with refresh_token!")
+        print(f"SUCCESS: Token generated and saved to {token_file} with refresh_token!", flush=True)
     else:
-        print(f"WARNING: Token saved to {token_file}, but NO refresh_token found. Make sure access_type='offline' and prompt='consent'.")
+        print(f"WARNING: Token saved to {token_file}, but NO refresh_token found.", flush=True)
 
 if __name__ == "__main__":
     main()
+
