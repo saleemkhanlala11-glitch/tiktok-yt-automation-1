@@ -2,10 +2,10 @@ name: Upload Slot 2
 
 on:
   schedule:
-    # Slot 2 publish time: 00:00 UTC (8 PM ET)
-    - cron: '0 0 * * *'
-    # Retry slot (+90m fresh IP): 01:30 UTC
-    - cron: '30 1 * * *'
+    # Slot 2 publish time: 19:00 UTC (9 PM CEST)
+    - cron: '0 19 * * *'
+    # Retry slot (+90m fresh IP): 20:30 UTC
+    - cron: '30 20 * * *'
   workflow_dispatch:
     inputs:
       channel:

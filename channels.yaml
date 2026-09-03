@@ -1,20 +1,19 @@
 channels:
   - id: channel_1
-    tiktok_username: "georgesavestheworld"
-    youtube_channel_name: "Scrap Yard Shreds"
-    owner_email: "saleemkhanlala11@gmail.com"
+    tiktok_username: "einepeperoni"
+    youtube_channel_name: "einepeperoni"
+    owner_email: "peperonikontakt@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
-    description_footer: "#shorts #scrapyardshreds #cars #supercars #carflip #viral"
-    default_tags: ["scrapyardshreds", "carflip", "supercars", "porsche", "ferrari", "astonmartin", "shorts", "viral"]
-    youtube_category_id: "2"
+    description_footer: "#shorts #diy #altbausanierung #hausbau #renovierung #viral"
+    default_tags: ["diy", "altbausanierung", "hausbau", "renovierung", "handwerk", "shorts", "viral"]
+    youtube_category_id: "26"
     enabled: true
     max_retry_days: 7
     shorts_max_seconds: 180
     upload_mode: popular_split
     max_download_candidates: 20
     slot_publish_times_utc:
-      1: "22:00"
-      2: "00:00"
-
+      1: "17:00"
+      2: "19:00"
