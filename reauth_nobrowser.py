@@ -21,17 +21,15 @@ def main():
     os.makedirs("tokens", exist_ok=True)
 
     flow = InstalledAppFlow.from_client_secrets_file(cred_file, scopes=SCOPES)
-    flow.redirect_uri = "http://localhost:8088/"
-    auth_url, _ = flow.authorization_url(prompt="consent", access_type="offline")
-    
-    print(f"AUTH_URL_START: {auth_url} :AUTH_URL_END", flush=True)
-    print("Starting local server on port 8088 to capture callback...", flush=True)
+    flow.redirect_uri = "http://localhost:8080/"
+    print("Starting local server on port 8080...", flush=True)
     
     creds = flow.run_local_server(
-        port=8088,
+        port=8080,
         prompt="consent",
         access_type="offline",
-        open_browser=False
+        open_browser=False,
+        authorization_prompt_message="AUTH_URL_START: {url} :AUTH_URL_END\n"
     )
 
     token_json = creds.to_json()
