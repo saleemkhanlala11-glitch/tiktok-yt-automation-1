@@ -1,14 +1,14 @@
 channels:
   - id: channel_1
-    tiktok_username: "scibodytherapy"
-    youtube_channel_name: "WONDERIST"
-    owner_email: "saleemkhandevspro@gmail.com"
+    tiktok_username: "georgesavestheworld"
+    youtube_channel_name: "Scrap Yard Shreds"
+    owner_email: "saleemkhanlala11@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
-    description_footer: "#scibodytherapy #shorts #science #health #bodytherapy #wellness #facts #viral"
-    default_tags: ["scibodytherapy", "shorts", "science", "health", "bodytherapy", "wellness", "facts", "viral"]
-    youtube_category_id: "28"
+    description_footer: "#shorts #scrapyardshreds #cars #supercars #carflip #viral"
+    default_tags: ["scrapyardshreds", "carflip", "supercars", "porsche", "ferrari", "astonmartin", "shorts", "viral"]
+    youtube_category_id: "2"
     enabled: true
     max_retry_days: 7
     shorts_max_seconds: 180
