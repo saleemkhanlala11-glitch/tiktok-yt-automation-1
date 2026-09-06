@@ -1,14 +1,14 @@
 channels:
   - id: channel_1
-    tiktok_username: "einepeperoni"
-    youtube_channel_name: "einepeperoni"
-    owner_email: "peperonikontakt@gmail.com"
+    tiktok_username: "user582115528447"
+    youtube_channel_name: "WildlifeUnscripted-e8o"
+    owner_email: "saleemkhan.world1@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
-    description_footer: "#shorts #diy #altbausanierung #hausbau #renovierung #viral"
-    default_tags: ["diy", "altbausanierung", "hausbau", "renovierung", "handwerk", "shorts", "viral"]
-    youtube_category_id: "26"
+    description_footer: "#shorts #wildlife #animals #animalrescue #cuteanimals #nature #viral #wildlifeunscripted"
+    default_tags: ["wildlife", "animal rescue", "cute animals", "wild animals", "nature", "animals", "shorts", "viral", "wildlife unscripted"]
+    youtube_category_id: "15"
     enabled: true
     max_retry_days: 7
     shorts_max_seconds: 180
