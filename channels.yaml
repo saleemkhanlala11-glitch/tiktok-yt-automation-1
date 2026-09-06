@@ -1,14 +1,14 @@
 channels:
   - id: channel_1
-    tiktok_username: "user582115528447"
-    youtube_channel_name: "WildlifeUnscripted-e8o"
+    tiktok_username: "irvo.11"
+    youtube_channel_name: "Irvo-b8tIrvo"
     owner_email: "saleemkhan.world1@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
-    description_footer: "#shorts #wildlife #animals #animalrescue #cuteanimals #nature #viral #wildlifeunscripted"
-    default_tags: ["wildlife", "animal rescue", "cute animals", "wild animals", "nature", "animals", "shorts", "viral", "wildlife unscripted"]
-    youtube_category_id: "15"
+    description_footer: "#shorts #comedy #skit #funny #sketch #viral #irvo"
+    default_tags: ["comedy", "skit", "sketch", "funny", "shorts", "viral", "humor", "irvo", "tiktok"]
+    youtube_category_id: "23"
     enabled: true
     max_retry_days: 7
     shorts_max_seconds: 180
