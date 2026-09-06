@@ -2,7 +2,7 @@ channels:
   - id: channel_1
     tiktok_username: "irvo.11"
     youtube_channel_name: "Irvo-b8tIrvo"
-    owner_email: "saleemkhan.world1@gmail.com"
+    owner_email: "mansornns1@gmail.com"
     google_credentials_file: "credentials/channel_1_client_secret.json"
     oauth_token_file: "tokens/channel_1_token.json"
     videos_per_day: 2
