@@ -11,3 +11,4 @@ env/
 venv/
 *.swp
 .DS_Store
+scratch/

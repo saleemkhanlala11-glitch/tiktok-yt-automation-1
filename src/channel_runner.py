@@ -6,6 +6,7 @@ from typing import Optional, List, Dict, Any
 from .config import ChannelConfig
 from .db import Database
 from .tiktok_downloader import list_profile_videos, download_tiktok_video
+from .gdrive_downloader import list_gdrive_folder_videos, download_gdrive_video
 from .video_converter import edit_short_video, get_video_duration
 from .youtube_uploader import YouTubeUploader
 from .notifier import send_discord_notification
@@ -24,15 +25,21 @@ def pick_candidate(
 
     if mode == "popular_split":
         if slot == 1:
-            # Newest first (yt-dlp profile order is chronological newest-first)
+            # Slot 1: Sequential / chronological from top
             return unposted
         else:
-            # Slot 2: most viewed first
-            return sorted(unposted, key=lambda x: x.get("view_count", 0), reverse=True)
+            # Slot 2: If view_count available, sort by views; otherwise alternate from bottom
+            has_views = any(v.get("view_count", 0) > 0 for v in unposted)
+            if has_views:
+                return sorted(unposted, key=lambda x: x.get("view_count", 0), reverse=True)
+            else:
+                return list(reversed(unposted))
     elif mode == "short_only":
         return unposted
     elif mode == "popular_only":
         return sorted(unposted, key=lambda x: x.get("view_count", 0), reverse=True)
+    elif mode == "sequence":
+        return unposted
     else:
         return unposted
 
@@ -49,11 +56,6 @@ def run_slot(config: ChannelConfig, slot: int, dry_run: bool = False) -> str:
         db.record_run(slot=slot, status="skipped", error_message="Per-day guard: already ran today")
         return "skipped"
 
-    # 2. Determine TikTok creator username for this slot
-    creator = config.tiktok_username
-    if slot == 2 and config.tiktok_username_slot2:
-        creator = config.tiktok_username_slot2
-
     posted_ids = db.get_posted_ids()
     candidates: List[Dict[str, Any]] = []
 
@@ -67,20 +69,32 @@ def run_slot(config: ChannelConfig, slot: int, dry_run: bool = False) -> str:
                 "url": r["tiktok_url"],
                 "title": r["title"],
                 "view_count": r.get("view_count", 0),
-                "is_retry": True
+                "is_retry": True,
+                "source": "gdrive" if "drive.google.com" in (r.get("tiktok_url") or "") else "tiktok"
             })
 
-    # Priority B: Fetch TikTok profile videos
-    profile_videos = list_profile_videos(creator, batch_size=150)
-    picked = pick_candidate(profile_videos, slot=slot, mode=config.upload_mode, posted_ids=posted_ids)
+    # Priority B: Fetch source videos (Google Drive or TikTok)
+    if config.source_type == "gdrive" and config.gdrive_folder_id:
+        logger.info(f"Using Google Drive source for channel '{config.id}' (Folder: {config.gdrive_folder_id})")
+        gdrive_items = list_gdrive_folder_videos(config.gdrive_folder_id)
+        picked = pick_candidate(gdrive_items, slot=slot, mode=config.upload_mode, posted_ids=posted_ids)
+        candidates.extend(picked)
+    else:
+        # TikTok source
+        creator = config.tiktok_username
+        if slot == 2 and config.tiktok_username_slot2:
+            creator = config.tiktok_username_slot2
 
-    # Secondary account fallback to primary if exhausted
-    if not picked and creator != config.tiktok_username:
-        logger.info(f"Secondary creator @{creator} exhausted. Falling back to primary @{config.tiktok_username}...")
-        profile_videos = list_profile_videos(config.tiktok_username, batch_size=150)
+        profile_videos = list_profile_videos(creator, batch_size=150)
         picked = pick_candidate(profile_videos, slot=slot, mode=config.upload_mode, posted_ids=posted_ids)
 
-    candidates.extend(picked)
+        # Secondary account fallback to primary if exhausted
+        if not picked and creator != config.tiktok_username:
+            logger.info(f"Secondary creator @{creator} exhausted. Falling back to primary @{config.tiktok_username}...")
+            profile_videos = list_profile_videos(config.tiktok_username, batch_size=150)
+            picked = pick_candidate(profile_videos, slot=slot, mode=config.upload_mode, posted_ids=posted_ids)
+
+        candidates.extend(picked)
 
     if not candidates:
         logger.warning(f"No unposted videos found for channel '{config.id}' (slot {slot}). Content exhausted.")
@@ -105,10 +119,16 @@ def run_slot(config: ChannelConfig, slot: int, dry_run: bool = False) -> str:
         title = config.fixed_title or cand.get("title", "")
         raw_file = os.path.join(downloads_dir, f"raw_{vid_id}.mp4")
         edited_file = os.path.join(downloads_dir, f"edited_{vid_id}.mp4")
+        source = cand.get("source", config.source_type)
 
-        logger.info(f"Trying candidate [{i+1}/{max_candidates}]: ID={vid_id} Title='{title[:40]}'")
+        logger.info(f"Trying candidate [{i+1}/{max_candidates}]: ID={vid_id} Title='{title[:50]}'")
 
-        downloaded_path = download_tiktok_video(vid_url, raw_file)
+        # Download based on source
+        if source == "gdrive":
+            downloaded_path = download_gdrive_video(vid_id, raw_file)
+        else:
+            downloaded_path = download_tiktok_video(vid_url, raw_file)
+
         if not downloaded_path:
             logger.warning(f"Download failed for video {vid_id}. Queueing for retry tomorrow.")
             db.queue_for_retry(
@@ -121,7 +141,7 @@ def run_slot(config: ChannelConfig, slot: int, dry_run: bool = False) -> str:
             )
             continue
 
-        # Light video edit (normalize 9:16, audio normalization, subtle enhancement)
+        # Video editing and enhancement (normalize 9:16, audio normalization, subtle visual boost, fades)
         processed_path = edit_short_video(raw_file, edited_file)
         if not processed_path:
             processed_path = raw_file

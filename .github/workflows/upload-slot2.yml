@@ -2,10 +2,10 @@ name: Upload Slot 2
 
 on:
   schedule:
-    # Slot 2 publish time: 19:00 UTC (9 PM CEST)
-    - cron: '0 19 * * *'
-    # Retry slot (+90m fresh IP): 20:30 UTC
-    - cron: '30 20 * * *'
+    # Slot 2 publish time: 22:00 UTC
+    - cron: '0 22 * * *'
+    # Retry slot (+90m fresh IP): 23:30 UTC
+    - cron: '30 23 * * *'
   workflow_dispatch:
     inputs:
       channel:
@@ -19,7 +19,7 @@ on:
         default: false
 
 concurrency:
-  group: upload-channel_1
+  group: upload-channel_1-slot2
   cancel-in-progress: false
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
           TOKEN_B64: ${{ secrets.CHANNEL_1_TOKEN }}
           COOKIES_B64: ${{ secrets.TIKTOK_COOKIES }}
         run: |
-          mkdir -p credentials tokens downloads logs
+          mkdir -p credentials tokens downloads logs data
           if [ -n "$CLIENT_SECRET_B64" ]; then
             echo "$CLIENT_SECRET_B64" | base64 -d > credentials/channel_1_client_secret.json
           fi
@@ -84,7 +84,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          for i in 1 2 3; do
+          for i in 1 2 3 4 5; do
             git pull --rebase origin main || true
             git add data/
             if git diff --staged --quiet; then
@@ -101,7 +101,7 @@ jobs:
             fi
           done
 
-      - name: Upload execution logs
+      - name: Upload Logs Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:

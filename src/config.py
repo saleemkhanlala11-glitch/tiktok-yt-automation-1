@@ -4,15 +4,18 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 
 VALID_UPLOAD_MODES = {"popular_split", "short_only", "popular_only", "sequence"}
+VALID_SOURCE_TYPES = {"gdrive", "tiktok"}
 
 @dataclass
 class ChannelConfig:
     id: str
-    tiktok_username: str
-    youtube_channel_name: str
-    owner_email: str
-    google_credentials_file: str
-    oauth_token_file: str
+    source_type: str = "gdrive"
+    gdrive_folder_id: Optional[str] = None
+    tiktok_username: str = ""
+    youtube_channel_name: str = ""
+    owner_email: str = ""
+    google_credentials_file: str = ""
+    oauth_token_file: str = ""
     videos_per_day: int = 2
     description_footer: str = ""
     default_tags: List[str] = field(default_factory=list)
@@ -44,12 +47,18 @@ def load_channels_config(config_path: str = "channels.yaml") -> List[ChannelConf
         if mode not in VALID_UPLOAD_MODES:
             raise ValueError(f"Channel {item.get('id')}: invalid upload_mode '{mode}'. Whitelist: {VALID_UPLOAD_MODES}")
 
+        source_type = item.get("source_type", "gdrive" if "gdrive_folder_id" in item else "tiktok")
+        if source_type not in VALID_SOURCE_TYPES:
+            raise ValueError(f"Channel {item.get('id')}: invalid source_type '{source_type}'. Valid: {VALID_SOURCE_TYPES}")
+
         slot_times = item.get("slot_publish_times_utc", {})
         parsed_slots = {int(k): str(v) for k, v in slot_times.items()}
 
         cfg = ChannelConfig(
             id=str(item["id"]),
-            tiktok_username=str(item["tiktok_username"]).lstrip("@"),
+            source_type=source_type,
+            gdrive_folder_id=item.get("gdrive_folder_id"),
+            tiktok_username=str(item.get("tiktok_username", "")).lstrip("@"),
             youtube_channel_name=str(item.get("youtube_channel_name", "")),
             owner_email=str(item.get("owner_email", "")),
             google_credentials_file=str(item.get("google_credentials_file", f"credentials/{item['id']}_client_secret.json")),

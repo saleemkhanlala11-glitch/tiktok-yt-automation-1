@@ -34,7 +34,8 @@ def run_pipeline(channel_id: Optional[str], slot: int, dry_run: bool = False) ->
 
     exit_code = 0
     for ch in channels:
-        logger.info(f"--- Processing channel: {ch.id} (@{ch.tiktok_username}) ---")
+        name = ch.youtube_channel_name or ch.tiktok_username or ch.id
+        logger.info(f"--- Processing channel: {ch.id} ({name}) ---")
         try:
             status = run_slot(ch, slot=slot, dry_run=dry_run)
             logger.info(f"Channel {ch.id} finished with status: {status}")
