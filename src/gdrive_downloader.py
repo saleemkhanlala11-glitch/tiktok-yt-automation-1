@@ -32,7 +32,7 @@ def list_gdrive_folder_videos(folder_id: str, max_retries: int = 3) -> List[Dict
 
     for attempt in range(1, max_retries + 1):
         try:
-            resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=20)
+            resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=45)
             if resp.status_code != 200:
                 logger.warning(f"Google Drive returned HTTP {resp.status_code} (attempt {attempt}/{max_retries})")
                 time.sleep(attempt * 2)
